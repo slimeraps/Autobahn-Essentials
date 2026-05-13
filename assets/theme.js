@@ -1009,11 +1009,22 @@ document.querySelectorAll('.product-gallery').forEach((gallery) => {
   let galleryItems = getGalleryItems();
   let activeIndex = Math.max(0, galleryItems.findIndex((item) => item.thumb?.classList.contains('is-active')));
   let swipeStartX = null;
+  let magnifierFrame = 0;
+  let magnifierPoint = null;
+  let magnifierZoom = 2.3;
+  let magnifierLensRadius = 100;
+  let magnifierImageUrl = '';
+
+  const refreshMagnifierMetrics = () => {
+    magnifierZoom = Number.parseFloat(getComputedStyle(main).getPropertyValue('--magnifier-zoom')) || 2.3;
+    magnifierLensRadius = magnifier?.clientWidth ? magnifier.clientWidth / 2 : 100;
+  };
 
   const updateMagnifierImage = () => {
     if (!magnifier) return;
     const imageUrl = target.currentSrc || target.src;
-    if (imageUrl) {
+    if (imageUrl && imageUrl !== magnifierImageUrl) {
+      magnifierImageUrl = imageUrl;
       magnifier.style.setProperty('--magnifier-image', `url("${imageUrl}")`);
     }
   };
@@ -1057,22 +1068,31 @@ document.querySelectorAll('.product-gallery').forEach((gallery) => {
   const showNextImage = () => updateLightbox(activeIndex + 1);
 
   const hideMagnifier = () => {
+    if (magnifierFrame) {
+      window.cancelAnimationFrame(magnifierFrame);
+      magnifierFrame = 0;
+    }
+    magnifierPoint = null;
     main.classList.remove('is-magnifying');
     main.classList.remove('is-cursor-dot-active');
   };
 
-  const moveMagnifier = (event) => {
-    if (!magnifier || !cursorDot || !hoverZoomQuery.matches) {
+  const applyMagnifierPosition = () => {
+    magnifierFrame = 0;
+
+    if (!magnifier || !cursorDot || !magnifierPoint || !hoverZoomQuery.matches) {
       hideMagnifier();
       return;
     }
 
+    const { clientX, clientY } = magnifierPoint;
+
     const imageRect = getRenderedImageRect(target);
     const isInsideImage =
-      event.clientX >= imageRect.left &&
-      event.clientX <= imageRect.right &&
-      event.clientY >= imageRect.top &&
-      event.clientY <= imageRect.bottom;
+      clientX >= imageRect.left &&
+      clientX <= imageRect.right &&
+      clientY >= imageRect.top &&
+      clientY <= imageRect.bottom;
 
     if (!isInsideImage) {
       hideMagnifier();
@@ -1080,30 +1100,46 @@ document.querySelectorAll('.product-gallery').forEach((gallery) => {
     }
 
     const mainRect = main.getBoundingClientRect();
-    const x = event.clientX - mainRect.left;
-    const y = event.clientY - mainRect.top;
-    const cursorImageX = event.clientX - imageRect.left;
-    const cursorImageY = event.clientY - imageRect.top;
-    const zoom = Number.parseFloat(getComputedStyle(main).getPropertyValue('--magnifier-zoom')) || 2.3;
-    const lensRadius = magnifier.clientWidth / 2;
-    const backgroundX = lensRadius - cursorImageX * zoom;
-    const backgroundY = lensRadius - cursorImageY * zoom;
+    const x = clientX - mainRect.left;
+    const y = clientY - mainRect.top;
+    const cursorImageX = clientX - imageRect.left;
+    const cursorImageY = clientY - imageRect.top;
+    const backgroundX = magnifierLensRadius - cursorImageX * magnifierZoom;
+    const backgroundY = magnifierLensRadius - cursorImageY * magnifierZoom;
 
     magnifier.style.setProperty('--magnifier-x', `${x}px`);
     magnifier.style.setProperty('--magnifier-y', `${y}px`);
-    magnifier.style.setProperty('--magnifier-bg-size', `${imageRect.width * zoom}px ${imageRect.height * zoom}px`);
+    magnifier.style.setProperty('--magnifier-bg-size', `${imageRect.width * magnifierZoom}px ${imageRect.height * magnifierZoom}px`);
     magnifier.style.setProperty('--magnifier-bg-position', `${backgroundX}px ${backgroundY}px`);
     cursorDot.style.setProperty('--cursor-dot-x', `${x}px`);
     cursorDot.style.setProperty('--cursor-dot-y', `${y}px`);
-    updateMagnifierImage();
     main.classList.add('is-magnifying');
     main.classList.add('is-cursor-dot-active');
   };
 
-  main.addEventListener('pointermove', moveMagnifier);
+  const moveMagnifier = (event) => {
+    magnifierPoint = {
+      clientX: event.clientX,
+      clientY: event.clientY,
+    };
+
+    if (!magnifierFrame) {
+      magnifierFrame = window.requestAnimationFrame(applyMagnifierPosition);
+    }
+  };
+
+  refreshMagnifierMetrics();
+  main.addEventListener('pointermove', moveMagnifier, { passive: true });
   main.addEventListener('pointerleave', hideMagnifier);
-  hoverZoomQuery.addEventListener('change', hideMagnifier);
-  target.addEventListener('load', updateMagnifierImage);
+  hoverZoomQuery.addEventListener('change', () => {
+    refreshMagnifierMetrics();
+    hideMagnifier();
+  });
+  window.addEventListener('resize', refreshMagnifierMetrics, { passive: true });
+  target.addEventListener('load', () => {
+    refreshMagnifierMetrics();
+    updateMagnifierImage();
+  });
   updateMagnifierImage();
 
   openButton?.addEventListener('click', openLightbox);
@@ -1417,22 +1453,27 @@ if (cartDrawer) {
 initScrollReveal();
 
 const stickyHeader = document.querySelector('.site-header--sticky');
-if (stickyHeader) {
-  const toggleHeaderShrink = () => {
-    stickyHeader.classList.toggle('is-scrolled', window.scrollY > 60);
-  };
-  toggleHeaderShrink();
-  window.addEventListener('scroll', toggleHeaderShrink, { passive: true });
+const backToTop = document.querySelector('[data-back-to-top]');
+let scrollUiFrame = 0;
+
+const updateScrollUi = () => {
+  scrollUiFrame = 0;
+  const y = window.scrollY;
+
+  stickyHeader?.classList.toggle('is-scrolled', y > 60);
+  backToTop?.classList.toggle('is-visible', y > 640);
+};
+
+if (stickyHeader || backToTop) {
+  updateScrollUi();
+  window.addEventListener('scroll', () => {
+    if (!scrollUiFrame) {
+      scrollUiFrame = window.requestAnimationFrame(updateScrollUi);
+    }
+  }, { passive: true });
 }
 
-const backToTop = document.querySelector('[data-back-to-top]');
 if (backToTop) {
-  const toggleBackToTop = () => {
-    backToTop.classList.toggle('is-visible', window.scrollY > 640);
-  };
-
-  toggleBackToTop();
-  window.addEventListener('scroll', toggleBackToTop, { passive: true });
   backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

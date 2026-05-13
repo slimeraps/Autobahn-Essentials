@@ -40,9 +40,9 @@
               {%- endif -%}
             {%- endif -%}
             {%- if collection.featured_image -%}
-              {{ collection.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', decoding: 'async', sizes: '(min-width: 990px) 25vw, (min-width: 361px) 50vw, 100vw' }}
+              {{ collection.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', decoding: 'async', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 25vw, (min-width: 361px) 50vw, 100vw' }}
             {%- elsif block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', decoding: 'async', sizes: '(min-width: 990px) 25vw, (min-width: 361px) 50vw, 100vw' }}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', decoding: 'async', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 25vw, (min-width: 361px) 50vw, 100vw' }}
             {%- elsif image_asset != blank -%}
               <img src="{{ image_asset | asset_url }}" alt="" width="900" height="600" loading="lazy" decoding="async" sizes="(min-width: 990px) 25vw, (min-width: 361px) 50vw, 100vw" style="object-position: {{ image_position }};">
             {%- else -%}

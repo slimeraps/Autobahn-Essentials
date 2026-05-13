@@ -1,9 +1,9 @@
 <section class="hero">
   <div class="hero__media">
     {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', sizes: '100vw' }}
+      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', decoding: 'async', fetchpriority: 'high', widths: '800, 1200, 1800, 2400', sizes: '100vw' }}
     {%- else -%}
-      <img src="{{ 'fallback-hero-bmw-m4.jpg' | asset_url }}" alt="BMW M4 at sunset" width="1800" height="1200" loading="eager" sizes="100vw">
+      <img src="{{ 'fallback-hero-bmw-m4.jpg' | asset_url }}" alt="BMW M4 at sunset" width="1800" height="1200" loading="eager" decoding="async" fetchpriority="high" sizes="100vw">
     {%- endif -%}
   </div>
 

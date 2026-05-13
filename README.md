@@ -2,6 +2,14 @@
 
 ### May 12th
 
+#### 10:22PM PST - Optimize theme motion and image stability
+
+- Frame-throttled product gallery magnifier updates and removed persistent gallery image `will-change` to reduce desktop hover work.
+- Consolidated sticky header and back-to-top scroll updates into a single animation-frame pass.
+- Added reduced-motion coverage for expanding cards, promo tiles, drawers, lightbox, and navigation transitions.
+- Added responsive image widths for hero, product card, featured collection, and promo images.
+- Added mobile guards for cart drawer text wrapping, gallery height, and lightbox nav placement.
+
 #### 10:09PM PST - Fix expanded collection card image coverage
 
 - Made featured collection card images cover the full tile on desktop so expanded hover states no longer expose empty card edges.
