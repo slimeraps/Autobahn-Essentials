@@ -2,6 +2,12 @@
 
 ### May 12th
 
+#### 10:35PM PST - Move brand shopping closer to hero
+
+- Moved Shop By Brand directly under the homepage hero.
+- Kept Shop By Category immediately below Shop By Brand and tightened the shared spacing between the two shopping sections.
+- Moved the spec strip below the brand and category shopping blocks.
+
 #### 10:22PM PST - Optimize theme motion and image stability
 
 - Frame-throttled product gallery magnifier updates and removed persistent gallery image `will-change` to reduce desktop hover work.

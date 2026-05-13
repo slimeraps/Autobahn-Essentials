@@ -286,9 +286,9 @@
   },
   "order": [
     "hero",
-    "spec_strip",
     "brand_collections",
     "featured_collections",
+    "spec_strip",
     "promo_tiles",
     "brand_cta",
     "image_text",

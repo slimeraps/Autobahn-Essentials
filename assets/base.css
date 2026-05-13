@@ -206,6 +206,19 @@ summary:focus-visible {
   padding: clamp(32px, 5vw, 56px) 0;
 }
 
+.featured-collections-section--brand {
+  padding-top: clamp(24px, 4vw, 44px);
+  padding-bottom: clamp(18px, 3vw, 28px);
+}
+
+.featured-collections-section--category {
+  padding-top: 0;
+}
+
+.featured-collections-section--brand + .featured-collections-section--category {
+  margin-top: calc(-1 * clamp(8px, 1.6vw, 18px));
+}
+
 .scroll-reveal {
   opacity: 0;
   transform: translate3d(0, 36px, 0);
