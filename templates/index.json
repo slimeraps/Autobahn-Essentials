@@ -74,7 +74,7 @@
           "settings": {
             "collection": "audi",
             "image_asset": "brand-audi-black-bmw-m3.jpg",
-            "image_position": "center 85%",
+            "image_position": "center 60%",
             "title": "Audi",
             "fallback_link": "/search?type=product&q=Audi"
           }
@@ -94,7 +94,7 @@
           "settings": {
             "collection": "vw",
             "image_asset": "brand-volkswagen-red-gti.jpg",
-            "image_position": "center 87%",
+            "image_position": "center 65%",
             "title": "Volkswagen",
             "fallback_link": "/search?type=product&q=Volkswagen"
           }
@@ -165,44 +165,6 @@
         "heading": "Shop By Category"
       }
     },
-    "promo_tiles": {
-      "type": "promo-tiles",
-      "blocks": {
-        "turbo": {
-          "type": "tile",
-          "settings": {
-            "eyebrow": "Product drop",
-            "heading": "New Turbo Upgrades",
-            "text": "Upgraded performance built to last.",
-            "link": "/search?type=product&q=Turbo+upgrade"
-          }
-        },
-        "build": {
-          "type": "tile",
-          "settings": {
-            "eyebrow": "Build feature",
-            "heading": "600HP Build",
-            "text": "Explore parts for high-output street setups.",
-            "link": "/pages/builds"
-          }
-        },
-        "daily": {
-          "type": "tile",
-          "settings": {
-            "eyebrow": "OEM+ essentials",
-            "heading": "Daily Driver Ready",
-            "text": "Clean upgrades for fit, finish, and reliability.",
-            "link": "/collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "turbo",
-        "build",
-        "daily"
-      ],
-      "settings": {}
-    },
     "brand_cta": {
       "type": "brand-cta",
       "settings": {
@@ -245,6 +207,44 @@
         "button_label": "Shop Now",
         "button_link": "/collections/all"
       }
+    },
+    "promo_tiles": {
+      "type": "promo-tiles",
+      "blocks": {
+        "turbo": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "Product drop",
+            "heading": "New Turbo Upgrades",
+            "text": "Upgraded performance built to last.",
+            "link": "/search?type=product&q=Turbo+upgrade"
+          }
+        },
+        "build": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "Build feature",
+            "heading": "600HP Build",
+            "text": "Explore parts for high-output street setups.",
+            "link": "/pages/builds"
+          }
+        },
+        "daily": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "OEM+ essentials",
+            "heading": "Daily Driver Ready",
+            "text": "Clean upgrades for fit, finish, and reliability.",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "turbo",
+        "build",
+        "daily"
+      ],
+      "settings": {}
     },
     "instagram": {
       "type": "social-instagram",
