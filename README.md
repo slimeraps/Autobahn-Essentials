@@ -2,6 +2,12 @@
 
 ### May 21st
 
+#### Release 6.1.1 Autobahn Blog hero polish
+
+- Swapped the AE.Blog page hero image from the generic Autobahn SVG silhouette to the night BMW photo (`fallback-hero-night-bmw.jpg`) so the page leads with the darker editorial tone used elsewhere on the site.
+- Renamed the AE.Blog page hero heading default from "AE.Blog" to "Autobahn Blog".
+- Removed the "Grid text" support copy on the right side of the Recent Stories heading on the AE.Blog page.
+
 #### Release 6.1.0 AE.Blog vertical redesign and persistent post history button
 
 - Replaced the 3-column AE.Blog grid with a full-width vertical list where each post renders as a horizontal row: image on the left, eyebrow date, title, excerpt, tags, and a Read post link stacked on the right.
