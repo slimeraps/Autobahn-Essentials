@@ -1,6 +1,12 @@
 {% render 'breadcrumbs' %}
 
-<section class="ae-page-hero" style="--ae-page-image: url({{ 'fallback-hero-night-bmw.jpg' | asset_url }});">
+{%- if section.settings.hero_image != blank -%}
+  {%- assign hero_image_url = section.settings.hero_image | image_url: width: 1600 -%}
+{%- else -%}
+  {%- assign hero_image_url = 'fallback-hero-bmw-m4.jpg' | asset_url -%}
+{%- endif -%}
+
+<section class="ae-page-hero" style="--ae-page-image: url({{ hero_image_url }});">
   <div class="page-width ae-page-hero__inner">
     <div>
       <div class="eyebrow">{{ section.settings.eyebrow }}</div>
@@ -64,6 +70,12 @@
 {
   "name": "AE.Blog page",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Upload a custom hero photo. Falls back to the BMW M4 sunset shot when empty."
+    },
     {
       "type": "text",
       "id": "eyebrow",

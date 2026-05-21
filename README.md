@@ -2,6 +2,11 @@
 
 ### May 21st
 
+#### Release 6.1.2 Autobahn Blog hero image fix
+
+- Swapped the default Autobahn Blog hero from the night BMW photo (almost entirely black and portrait-cropped, leaving the page hero rendering as solid black behind the dark page overlay) to the G82 BMW M4 sunset shot, which the existing dark hero overlay turns into a moody editorial frame.
+- Added a Hero image picker to the Autobahn Blog section so a custom photo can be uploaded from the theme editor without code changes.
+
 #### Release 6.1.1 Autobahn Blog hero polish
 
 - Swapped the AE.Blog page hero image from the generic Autobahn SVG silhouette to the night BMW photo (`fallback-hero-night-bmw.jpg`) so the page leads with the darker editorial tone used elsewhere on the site.
