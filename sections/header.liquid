@@ -31,13 +31,15 @@
       {%- if section.settings.menu.links.size > 0 -%}
         {%- assign has_home_link = false -%}
         {%- assign has_builds_link = false -%}
+        {%- assign has_ae_blog_link = false -%}
+        {%- assign ae_blog_url = '/pages/ae-blog' -%}
         {%- assign has_contacts_link = false -%}
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title = link.title | downcase | strip -%}
           {%- if link_title == 'home' -%}
             {%- assign has_home_link = true -%}
-            <a href="{{ link.url }}">{{ link.title }}</a>
+            <a href="{{ link.url }}">Home</a>
           {%- endif -%}
         {%- endfor -%}
         {%- unless has_home_link -%}
@@ -60,6 +62,16 @@
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title = link.title | downcase | strip -%}
+          {%- if link_title contains 'blog' -%}
+            {%- assign has_ae_blog_link = true -%}
+            {%- assign ae_blog_url = link.url -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <a href="{{ ae_blog_url }}">AE. Blog</a>
+
+        {%- for link in section.settings.menu.links -%}
+          {%- assign link_title = link.title | downcase | strip -%}
           {%- if link_title contains 'contact' -%}
             {%- assign has_contacts_link = true -%}
             {% render 'contacts-dropdown', label: 'Contacts' %}
@@ -71,7 +83,7 @@
 
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title = link.title | downcase | strip -%}
-          {%- if link_title == 'home' or link_title contains 'contact' or link_title contains 'build' or link_title contains 'shop' or link_title contains 'categor' or link_title == 'bmw' or link_title == 'audi' or link_title == 'vw' or link_title == 'volkswagen' -%}
+          {%- if link_title == 'home' or link_title contains 'contact' or link_title contains 'build' or link_title contains 'blog' or link_title contains 'shop' or link_title contains 'categor' or link_title == 'bmw' or link_title == 'audi' or link_title == 'vw' or link_title == 'volkswagen' -%}
             {%- continue -%}
           {%- endif -%}
           <a href="{{ link.url }}">{{ link.title }}</a>
@@ -80,6 +92,7 @@
         <a href="{{ routes.root_url }}">Home</a>
         {% render 'category-dropdown', label: 'Shop' %}
         <a href="/pages/builds">Builds</a>
+        <a href="/pages/ae-blog">AE. Blog</a>
         {% render 'contacts-dropdown', label: 'Contacts' %}
       {%- endif -%}
     </nav>

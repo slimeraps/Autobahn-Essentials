@@ -1,5 +1,21 @@
 ## Changelog
 
+### May 21st
+
+#### Release 6.0.1 align AE. Blog nav with other items
+
+- Added an explicit AE. Blog branch to the header so it renders between Builds and Contacts in the same code path as the other top-level nav links, eliminating a font/style mismatch from the previous catch-all render.
+- Hardcoded the AE. Blog display text and excluded "blog" titles from the header catch-all so the link cannot render twice if the merchant menu also contains an AE. Blog item.
+- Default AE. Blog destination is `/pages/ae-blog`; a menu item whose title contains "blog" overrides the destination.
+
+#### Release 6.0.0 AE.Blog page and Builds reset
+
+- Added a new AE.Blog page template (`templates/page.ae-blog.json`) and section (`sections/page-ae-blog-autobahn.liquid`) that auto-feeds the latest 10 posts from the `autobahn-blog` Shopify blog, newest first.
+- Added a "View blog history" button on the AE.Blog page that appears once the source blog has more than 10 posts, linking to Shopify's built-in archive at `/blogs/autobahn-blog`.
+- Added a theme-editor Blog source picker on AE.Blog so the source blog can be changed without code edits.
+- Stripped the Builds page (`sections/page-builds-autobahn.liquid`) to hero-only ahead of a future gallery redesign.
+- Removed the manual "Build card" theme-editor blocks, the grid, and the "Submit a build" CTA from the Builds page schema. Cards are now driven by published blog posts on the AE.Blog page instead of hand-maintained blocks.
+
 ### May 14th
 
 #### 11:48PM PST - Release 5.5 restore 5.1 hero treatment with new image
