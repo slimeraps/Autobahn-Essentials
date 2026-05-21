@@ -2,6 +2,11 @@
 
 ### May 21st
 
+#### Release 6.1.3 Autobahn Blog hero text removed and overlay disabled
+
+- Removed the eyebrow, heading, and hero text from the Autobahn Blog hero so a custom hero artwork can carry the page header on its own. Removed the now-unused eyebrow/heading/text settings from the section schema.
+- Added an `ae-page-hero--no-overlay` modifier and applied it to the Autobahn Blog hero so the dark left-to-right gradient overlay no longer fights with the uploaded artwork. The Builds hero keeps the original overlay.
+
 #### Release 6.1.2 Autobahn Blog hero image fix
 
 - Swapped the default Autobahn Blog hero from the night BMW photo (almost entirely black and portrait-cropped, leaving the page hero rendering as solid black behind the dark page overlay) to the G82 BMW M4 sunset shot, which the existing dark hero overlay turns into a moody editorial frame.

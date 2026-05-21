@@ -2961,6 +2961,11 @@ body.is-gallery-lightbox-open {
     var(--ae-page-image, url("autobahn-hero.svg")) center / cover no-repeat;
 }
 
+.ae-page-hero.ae-page-hero--no-overlay {
+  background:
+    var(--ae-page-image, url("autobahn-hero.svg")) center / cover no-repeat;
+}
+
 .ae-page-hero::after {
   content: "";
   position: absolute;
