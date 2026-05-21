@@ -2,6 +2,13 @@
 
 ### May 21st
 
+#### Release 6.1.0 AE.Blog vertical redesign and persistent post history button
+
+- Replaced the 3-column AE.Blog grid with a full-width vertical list where each post renders as a horizontal row: image on the left, eyebrow date, title, excerpt, tags, and a Read post link stacked on the right.
+- Made the post images bigger (4:3 on desktop, 16:9 on mobile) and applied a small vertical translate so the image sits offset from the body for a more editorial layout.
+- Added a subtle hover lift on each post image and a top divider between consecutive posts.
+- Made the Post history button at the bottom of the AE.Blog page render unconditionally so it is visible before the source blog reaches eleven posts, and renamed it from "View blog history" to "Post history".
+
 #### Release 6.0.1 align AE. Blog nav with other items
 
 - Added an explicit AE. Blog branch to the header so it renders between Builds and Contacts in the same code path as the other top-level nav links, eliminating a font/style mismatch from the previous catch-all render.

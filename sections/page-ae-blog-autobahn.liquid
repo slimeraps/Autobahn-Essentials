@@ -26,19 +26,20 @@
     {%- endif -%}
 
     {%- assign post_fallback_images = 'fallback-build-1.jpg,fallback-promo-3.jpg,fallback-promo-2.jpg,fallback-image-text-euro-car.jpg,fallback-collection-4.jpg,fallback-collection-3.jpg' | split: ',' -%}
-    <div class="ae-grid-3">
+    <div class="ae-blog-list">
       {%- for article in post_blog.articles limit: 10 -%}
-        <article class="ae-card ae-build-card">
+        <article class="ae-blog-post">
           {%- if article.image != blank -%}
-            <div class="ae-build-card__media" style="--ae-build-image: url({{ article.image | image_url: width: 900 }});"></div>
+            {%- assign post_media_image = article.image | image_url: width: 1200 -%}
           {%- else -%}
             {%- assign placeholder_index = forloop.index0 | modulo: post_fallback_images.size -%}
-            <div class="ae-build-card__media" style="--ae-build-image: url({{ post_fallback_images[placeholder_index] | asset_url }});"></div>
+            {%- assign post_media_image = post_fallback_images[placeholder_index] | asset_url -%}
           {%- endif -%}
-          <div class="ae-build-card__body">
+          <a class="ae-blog-post__media" href="{{ article.url }}" style="--ae-blog-image: url({{ post_media_image }});" aria-label="{{ article.title | escape }}"></a>
+          <div class="ae-blog-post__body">
             <div class="eyebrow">{{ article.published_at | date: '%b %d, %Y' }}</div>
             <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
-            <p>{{ article.excerpt | default: article.content | strip_html | truncatewords: 28 }}</p>
+            <p>{{ article.excerpt | default: article.content | strip_html | truncatewords: 42 }}</p>
             {%- if article.tags.size > 0 -%}
               <div class="ae-meta-row">
                 {%- for tag in article.tags limit: 3 -%}
@@ -46,6 +47,7 @@
                 {%- endfor -%}
               </div>
             {%- endif -%}
+            <a class="ae-blog-post__more" href="{{ article.url }}">Read post &rarr;</a>
           </div>
         </article>
       {%- else -%}
@@ -53,11 +55,9 @@
       {%- endfor -%}
     </div>
 
-    {%- if post_blog.articles_count > 10 -%}
-      <div class="ae-page-actions" style="margin-top: 2rem; justify-content: center;">
-        <a class="button button--secondary" href="{{ post_blog.url }}">View blog history</a>
-      </div>
-    {%- endif -%}
+    <div class="ae-page-actions" style="margin-top: 2rem; justify-content: center;">
+      <a class="button button--secondary" href="{{ post_blog.url }}">Post history</a>
+    </div>
   </div>
 </section>
 
