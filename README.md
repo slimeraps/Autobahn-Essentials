@@ -2,6 +2,12 @@
 
 ### May 21st
 
+#### Release 6.1.4 Homepage hero shortened and Builds schema fix
+
+- Shrunk the homepage hero so its total visual height matches the Autobahn Blog page hero: lowered `.hero` min-height to `clamp(380px, 44vw, 520px)` desktop / `440px` mobile, trimmed `.hero__content` padding, and removed the 110-210px image bleed-down that pushed the orange BMW behind the spec strip and inflated the perceived hero size.
+- Switched the homepage hero image crop to `object-position: center center` so the focal point is the geometric center of the image regardless of which artwork is assigned.
+- Fixed an upload-blocking schema error on `sections/page-builds-autobahn.liquid`: changed the Instagram URL setting from `type: url` to `type: text` because Shopify's `url` setting type rejects external URLs as defaults, which was also preventing `templates/page.builds.json` from resolving its section.
+
 #### Release 6.1.3 Autobahn Blog hero text removed and overlay disabled
 
 - Removed the eyebrow, heading, and hero text from the Autobahn Blog hero so a custom hero artwork can carry the page header on its own. Removed the now-unused eyebrow/heading/text settings from the section schema.

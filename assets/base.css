@@ -954,10 +954,10 @@ select option:hover {
 
 .hero {
   position: relative;
-  min-height: min(88vh, 900px);
+  min-height: clamp(380px, 44vw, 520px);
   display: flex;
   align-items: end;
-  overflow: visible;
+  overflow: hidden;
   border-bottom: 0;
   background: transparent;
 }
@@ -965,7 +965,7 @@ select option:hover {
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0 0 calc(-1 * clamp(110px, 12vw, 210px));
+  inset: 0;
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.72) 44%, rgba(0, 0, 0, 0.18) 100%),
     linear-gradient(180deg, transparent 54%, rgba(8, 9, 10, 0.22) 72%, rgba(8, 9, 10, 0.9) 100%),
@@ -976,16 +976,17 @@ select option:hover {
 
 .hero__media {
   position: absolute;
-  inset: 0 0 calc(-1 * clamp(110px, 12vw, 210px));
+  inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .hero__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 58%;
+  object-position: center center;
 }
 
 .hero__media::after {
@@ -1002,7 +1003,7 @@ select option:hover {
   z-index: 2;
   width: min(100% - 32px, var(--page-width));
   margin: 0 auto;
-  padding: 96px 0 clamp(56px, 9vw, 108px);
+  padding: clamp(54px, 8vw, 96px) 0 clamp(48px, 8vw, 92px);
 }
 
 .hero h1 {
@@ -4057,20 +4058,20 @@ body.is-cart-open {
   }
 
   .hero {
-    min-height: min(84svh, 760px);
+    min-height: 440px;
   }
 
   .hero::before,
   .hero__media {
-    inset: 0 0 calc(-1 * clamp(90px, 18vw, 150px));
+    inset: 0;
   }
 
   .hero::before {
-    background-position: 62% center;
+    background-position: center center;
   }
 
   .hero__media img {
-    object-position: 62% center;
+    object-position: center center;
   }
 
   .hero__media::after {
