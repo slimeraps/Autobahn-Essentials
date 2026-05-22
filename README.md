@@ -1,5 +1,14 @@
 ## Changelog
 
+### May 22nd
+
+#### Release 6.2.0 Homepage hero artwork and orange divider
+
+- Replaced the homepage hero fallback image with `AE-hero-new.png` — a wide-landscape orange Lamborghini Urus and BMW M4 photo (6000x3376) that fills the hero crop edge-to-edge instead of leaning on the previous parking-garage M4 shot.
+- Updated the hero image's `width`/`height` attributes and alt text in `sections/hero-autobahn.liquid` so the browser can reserve the right aspect ratio and screen readers describe the new scene.
+- Added an 18px solid `var(--color-accent)` border below the hero so the section ends with a clean orange band before transitioning into the spec strip, replacing the previous borderless cut.
+- Heads-up: the new hero image is a ~15MB PNG. The Shopify CDN compresses it for the merchant-uploaded path, but the fallback ships at full size. Consider re-exporting as an optimized JPG before launch.
+
 ### May 21st
 
 #### Release 6.1.4 Homepage hero shortened and Builds schema fix
