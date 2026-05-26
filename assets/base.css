@@ -132,11 +132,30 @@ summary:focus-visible {
 .skip-to-content-link {
   position: absolute;
   z-index: 1000;
-  transform: translateY(-150%);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
 }
 
-.skip-to-content-link:focus {
-  transform: translateY(0);
+.skip-to-content-link:focus,
+.skip-to-content-link:focus-visible {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 12px 18px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+  top: 12px;
+  left: 12px;
 }
 
 .button,
@@ -147,24 +166,35 @@ summary:focus-visible {
   justify-content: center;
   gap: 10px;
   border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 13px 20px;
+  border-radius: 2px;
+  padding: 13px 22px;
   background: var(--color-accent);
   color: var(--color-accent-contrast);
   cursor: pointer;
-  font-weight: 800;
-  letter-spacing: 0;
+  font-weight: 900;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   box-shadow: 0 12px 30px rgba(232, 67, 42, 0.18);
-  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .button:hover,
 .button:focus-visible,
 .shopify-payment-button__button:hover {
-  transform: translateY(-1px);
+  transform: translate3d(0, -1px, 0);
   background: #ff563d;
-  box-shadow: 0 18px 40px rgba(232, 67, 42, 0.28);
+  box-shadow: 0 18px 40px rgba(232, 67, 42, 0.32);
+}
+
+.button:active,
+.shopify-payment-button__button:active {
+  transform: translate3d(0, 0, 0);
+  transition-duration: 80ms;
 }
 
 .button--dark {
@@ -393,12 +423,23 @@ summary:focus-visible {
   background: rgba(0, 0, 0, 0.93);
   backdrop-filter: blur(16px);
   box-shadow: 0 10px 42px rgba(0, 0, 0, 0.42);
-  transition: background 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
 }
 
 .site-header--sticky {
   position: sticky;
   top: 38px;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.site-header--sticky.is-hidden {
+  transform: translate3d(0, -112%, 0);
 }
 
 .site-header__inner {
@@ -1010,10 +1051,14 @@ select option:hover {
   max-width: 920px;
   margin: 8px 0 18px;
   color: #fff;
+  font-family: var(--font-heading);
   font-size: clamp(3rem, 8vw, 7.9rem);
-  line-height: 0.86;
-  letter-spacing: 0;
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.018em;
   text-transform: uppercase;
+  font-feature-settings: "ss01", "kern" 1;
+  text-rendering: optimizeLegibility;
 }
 
 .hero h1 span,
@@ -1499,22 +1544,28 @@ select option:hover {
 .product-card,
 .collection-card,
 .article-card {
+  position: relative;
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
+  border-radius: 3px;
+  overflow: visible;
+  isolation: isolate;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
     var(--color-surface);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
-  transition: transform 170ms ease, border-color 170ms ease, box-shadow 170ms ease;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .product-card:hover,
 .collection-card:hover,
 .article-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(232, 67, 42, 0.38);
+  transform: translate3d(0, -3px, 0);
+  border-color: rgba(232, 67, 42, 0.55);
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.34);
 }
 
@@ -1613,7 +1664,102 @@ select option:hover {
 .product-card__info,
 .collection-card__info,
 .article-card__info {
+  position: relative;
+  z-index: 1;
   padding: 16px;
+}
+
+.product-card__media,
+.collection-card__media,
+.article-card__media {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* ============================================================
+   Orange radial glow — pseudo-element, GPU-only (transform+opacity)
+   ============================================================ */
+.product-card::before,
+.collection-card::before,
+.article-card::before,
+.ae-build-card::before {
+  content: "";
+  position: absolute;
+  inset: -26%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(232, 67, 42, 0.62) 0%,
+    rgba(232, 67, 42, 0.28) 36%,
+    rgba(232, 67, 42, 0) 72%
+  );
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.78);
+  transition:
+    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.promo-tile::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(232, 67, 42, 0.55) 0%,
+    rgba(232, 67, 42, 0.22) 42%,
+    rgba(232, 67, 42, 0) 78%
+  );
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.82);
+  transition:
+    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.product-card:hover::before,
+.collection-card:hover::before,
+.article-card:hover::before,
+.ae-build-card:hover::before,
+.promo-tile:hover::before,
+.product-card:focus-within::before,
+.collection-card:focus-within::before,
+.article-card:focus-within::before,
+.ae-build-card:focus-within::before,
+.promo-tile:focus-within::before {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.product-card:hover,
+.collection-card:hover,
+.article-card:hover,
+.ae-build-card:hover,
+.promo-tile:hover {
+  will-change: transform;
+}
+
+.product-card:hover::before,
+.collection-card:hover::before,
+.article-card:hover::before,
+.ae-build-card:hover::before,
+.promo-tile:hover::before {
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card::before,
+  .collection-card::before,
+  .article-card::before,
+  .ae-build-card::before,
+  .promo-tile::before {
+    transition: opacity 120ms linear;
+    transform: none;
+  }
 }
 
 .collection-card__info {
@@ -1839,14 +1985,24 @@ select option:hover {
   flex-direction: column;
   justify-content: end;
   overflow: hidden;
+  isolation: isolate;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 22px;
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.88)),
     linear-gradient(135deg, rgba(232, 67, 42, 0.22), rgba(255, 255, 255, 0.03)),
     #111;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.promo-tile:hover {
+  border-color: rgba(232, 67, 42, 0.55);
 }
 
 .promo-tile img {
@@ -3119,14 +3275,26 @@ body.is-gallery-lightbox-open {
 }
 
 .ae-build-card {
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
   padding: 0;
-  transition: transform 170ms ease, border-color 170ms ease;
+  border-radius: 3px;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ae-build-card:hover {
-  border-color: rgba(232, 67, 42, 0.42);
-  transform: translateY(-2px);
+  border-color: rgba(232, 67, 42, 0.55);
+  transform: translate3d(0, -3px, 0);
+}
+
+.ae-build-card__media {
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .ae-build-card__media {
@@ -4364,7 +4532,7 @@ select,
 select.field,
 .select {
   border-color: rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
+  border-radius: 3px;
   background-color: #080808 !important;
   color: #fff !important;
   color-scheme: dark;
@@ -4393,8 +4561,6 @@ select option:hover,
 .field,
 .select,
 .quantity__input,
-.button,
-.shopify-payment-button__button,
 .nav-dropdown summary,
 .nav-dropdown__menu,
 .nav-dropdown__menu a,
@@ -4405,7 +4571,12 @@ select option:hover,
 .pagination span,
 .empty-state,
 .ae-form-status {
-  border-radius: 8px;
+  border-radius: 3px;
+}
+
+.button,
+.shopify-payment-button__button {
+  border-radius: 999px;
 }
 
 .icon-button,
@@ -4415,16 +4586,25 @@ select option:hover,
 
 .vehicle-finder__shell,
 .product-card,
-.collection-card,
 .article-card,
-.promo-tile,
 .image-text__media,
 .product-gallery__main,
 .product-info,
 .social-card,
 .ae-card,
 .ae-faq-list details {
-  border-radius: 8px;
+  border-radius: 3px;
+  border-color: rgba(255, 255, 255, 0.13);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)),
+    var(--color-surface);
+}
+
+/* Round brand + category collection cards and promo tiles */
+.collection-card,
+.collection-grid--featured .collection-card,
+.promo-tile {
+  border-radius: 16px;
   border-color: rgba(255, 255, 255, 0.13);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)),
@@ -4499,24 +4679,24 @@ select option:hover,
 
 .spec-item {
   border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 8px;
+  border-radius: 16px;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)),
     rgba(17, 17, 17, 0.94);
 }
 
 .social-card__grid span {
-  border-radius: 8px;
+  border-radius: 3px;
 }
 
 .cart-item img,
 .product-thumbs img,
 .product-thumb-button {
-  border-radius: 8px;
+  border-radius: 3px;
 }
 
 .ae-page-stat {
-  border-radius: 8px;
+  border-radius: 3px;
   border-left-width: 1px;
 }
 

@@ -1,5 +1,18 @@
 ## Changelog
 
+### May 25th
+
+#### Release 6.3.0 Racing UI pass — smart header, GPU glow, sharpened type, rounded CTAs
+
+- Added a smart sticky header that hides on scroll-down and reappears on scroll-up, driven by a `requestAnimationFrame`-throttled scroll listener in `assets/theme.js` with a 6px intent threshold and a `transform: translate3d(0, -112%, 0)` hide state on `.site-header--sticky.is-hidden`.
+- Sharpened the homepage hero typography in `.hero h1`: explicit Montserrat 900, `letter-spacing: -0.018em`, `line-height: 0.84`, `font-feature-settings: "ss01","kern"`, and `text-rendering: optimizeLegibility` for a tighter, more geometric headline.
+- Tightened the hero typewriter rhythm in `assets/theme.js` — `typeDelay 105→72ms`, `eraseDelay 55→36ms`, `phraseHoldDuration 4000→3400ms`.
+- Added an orange-to-transparent radial glow hover on `.product-card`, `.collection-card`, `.article-card`, `.ae-build-card`, and `.promo-tile` via a `::before` pseudo-element keyed off `#e8432a`. Glow uses `opacity` + `transform: translate3d(0,0,0) scale()` only, with `will-change` scoped to `:hover` and a reduced-motion fallback.
+- Converted card, button, and header transitions from `ease` to `cubic-bezier(0.22, 1, 0.36, 1)` for a snappier responsive feel. Hover lifts moved from `translateY` to `translate3d` so they composite on the GPU.
+- De-templatized the chrome — buttons now use `font-weight: 900` + `letter-spacing: 0.04em` + `padding: 13px 22px`, with sharp racing edges on smaller chrome (selects, fields, fitment badges, spec items) at `border-radius: 3px`.
+- Rounded off the primary CTAs and feature cards per request: `.button` / `.shopify-payment-button__button` to `999px` pills (covers Shop Now and View Builds); `.collection-card`, `.collection-grid--featured .collection-card`, `.promo-tile`, and `.spec-item` (Performance Tested / Enthusiast Owned / Euro Focused / Fast Shipping strip) to `border-radius: 16px`.
+- Hid the visible "Skip to content" link without breaking accessibility — it is now visually clipped (`clip-path: inset(50%)`) and only appears at top-left on `:focus` / `:focus-visible`. The DOM element and link target are unchanged.
+
 ### May 22nd
 
 #### Release 6.2.0 Homepage hero artwork and orange divider
