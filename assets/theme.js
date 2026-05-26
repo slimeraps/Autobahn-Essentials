@@ -72,9 +72,9 @@ const initHeroTypewriterSequence = () => {
   if (!typewriters.length) return;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const typeDelay = 105;
-  const eraseDelay = 55;
-  const phraseHoldDuration = 4000;
+  const typeDelay = 72;
+  const eraseDelay = 36;
+  const phraseHoldDuration = 3400;
 
   const wait = (duration) => new Promise((resolve) => {
     window.setTimeout(resolve, duration);
@@ -1518,11 +1518,42 @@ initHeroTypewriterSequence();
 
 const stickyHeader = document.querySelector('.site-header--sticky');
 if (stickyHeader) {
-  const toggleHeaderShrink = () => {
-    stickyHeader.classList.toggle('is-scrolled', window.scrollY > 60);
+  const shrinkAt = 60;
+  const hideAt = 140;
+  const intentDelta = 6;
+  let lastY = window.scrollY;
+  let parkedY = lastY;
+  let ticking = false;
+
+  const updateHeader = () => {
+    const y = Math.max(0, window.scrollY);
+    const delta = y - lastY;
+
+    stickyHeader.classList.toggle('is-scrolled', y > shrinkAt);
+
+    if (y <= hideAt) {
+      stickyHeader.classList.remove('is-hidden');
+      parkedY = y;
+    } else if (delta > intentDelta) {
+      stickyHeader.classList.add('is-hidden');
+      parkedY = y;
+    } else if (delta < -intentDelta || parkedY - y > 24) {
+      stickyHeader.classList.remove('is-hidden');
+      parkedY = y;
+    }
+
+    lastY = y;
+    ticking = false;
   };
-  toggleHeaderShrink();
-  window.addEventListener('scroll', toggleHeaderShrink, { passive: true });
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateHeader);
+  };
+
+  updateHeader();
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 const backToTop = document.querySelector('[data-back-to-top]');
