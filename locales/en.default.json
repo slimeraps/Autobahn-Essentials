@@ -24,7 +24,8 @@
   "newsletter": {
     "label": "Email address",
     "button_label": "Join",
-    "success": "Thanks for subscribing."
+    "success": "Thanks for subscribing.",
+    "popup_code_instruction": "Use this code with your signup email for 10% off your first order."
   },
   "sections": {
     "multi_vehicle_garage": {
