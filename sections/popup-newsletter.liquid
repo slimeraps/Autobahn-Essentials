@@ -59,10 +59,16 @@
               </div>
             {%- endif -%}
 
-            {%- if form.posted_successfully? -%}
-              <p class="popup-newsletter__success" data-popup-success>
-                {{ section.settings.success_message | default: 'Thanks! Check your inbox for your code.' }}
-              </p>
+            {%- if form.posted_successfully? and form.errors == blank -%}
+              <template data-popup-success>
+                <p class="popup-newsletter__success" tabindex="-1">
+                  <strong>AEWELCOME10</strong><br>
+                  {{ 'newsletter.popup_code_instruction' | t }}
+                </p>
+                {%- if section.settings.success_message != blank -%}
+                  <p class="popup-newsletter__fine-print">{{ section.settings.success_message }}</p>
+                {%- endif -%}
+              </template>
             {%- endif -%}
           {%- endform -%}
         </div>
@@ -81,6 +87,20 @@
 
       var STORAGE_KEY = 'ae:popup-newsletter:dismissed';
       var SUCCESS_KEY = 'ae:popup-newsletter:signed-up';
+      var SUBMISSION_KEY = 'ae:popup-newsletter:submitted';
+      var form = popup.querySelector('#PopupNewsletter');
+      var submitted = false;
+
+      try {
+        var submittedAt = Number(sessionStorage.getItem(SUBMISSION_KEY));
+        submitted = submittedAt > 0 && Date.now() - submittedAt < 15 * 60 * 1000;
+        sessionStorage.removeItem(SUBMISSION_KEY);
+      } catch (e) {}
+
+      window.addEventListener('submit', function (event) {
+        if (event.target !== form) return;
+        try { sessionStorage.setItem(SUBMISSION_KEY, String(Date.now())); } catch (e) {}
+      }, true);
 
       function isDismissed() {
         try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
@@ -105,8 +125,8 @@
         popup.setAttribute('aria-hidden', 'false');
         document.body.classList.add('is-popup-open');
         popup.dispatchEvent(new CustomEvent('ae:open-modal', { bubbles: true }));
-        var input = popup.querySelector('input[type="email"]');
-        if (input) setTimeout(function () { input.focus(); }, 50);
+        var focusTarget = popup.querySelector('.popup-newsletter__success, input[type="email"]');
+        if (focusTarget) setTimeout(function () { focusTarget.focus(); }, 50);
       }
 
       function close() {
@@ -127,19 +147,19 @@
         if (evt.key === 'Escape' && !popup.hidden) close();
       });
 
-      // if Shopify reloaded with the success state, persist & show briefly
       var success = popup.querySelector('[data-popup-success]');
-      if (success && window.location.hash && window.location.hash !== '#PopupNewsletter') {
-        markSignedUp();
-        return;
-      }
-      if (success) {
+      var popupReturn = !window.location.hash || window.location.hash === '#PopupNewsletter';
+      if (success && submitted && popupReturn) {
+        form.replaceWith(success.content.cloneNode(true));
+        var subheading = popup.querySelector('.popup-newsletter__subheading');
+        if (subheading) subheading.hidden = true;
         markSignedUp();
         open();
         return;
       }
+      if (success) success.remove();
 
-      if (popup.querySelector('[data-popup-error]')) {
+      if (popupReturn && popup.querySelector('[data-popup-error]')) {
         open();
         return;
       }
