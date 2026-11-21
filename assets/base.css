@@ -2900,6 +2900,11 @@ body.is-gallery-lightbox-open {
   margin: 0 auto;
 }
 
+.product-form shop-pay-wallet-button,
+.product-form iframe[title="trust-badges-widget"] {
+  color-scheme: only light;
+}
+
 .product-form .shopify-payment-button__button,
 .product-form .shopify-payment-button__button--unbranded {
   display: flex;
