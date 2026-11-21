@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, before, after } = require('node:test');
 const { chromium } = require('playwright');
-const { root, product, variants, fitmentData, renderSection, context, mount } = require('./helpers/theme.cjs');
+const { root, product, variants, fitmentData, renderSection, renderPage, context, mount } = require('./helpers/theme.cjs');
 
 let browser;
 before(async () => {
@@ -1187,6 +1187,41 @@ test('newsletter errors reopen a dismissed popup and invalid email cannot submit
     assert.equal(await page.locator('#PopupNewsletterEmail').evaluate((element) => element.checkValidity()), false);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('[data-popup-newsletter]').isVisible(), false);
+  });
+});
+
+test('the newsletter reveals the code after its valid submission and Shopify success', async () => {
+  await withPage({ popup: true, popupDelay: 0 }, async (page) => {
+    const successHtml = await renderPage({ popup: true, popupDelay: 0, formStates: { PopupNewsletter: { 'posted_successfully?': true } } });
+    const successUrl = 'http://theme.test/products/test-part?customer_posted=true#PopupNewsletter';
+    await page.route('**/test-part?customer_posted=true', (route) => route.fulfill({ contentType: 'text/html', body: successHtml }));
+    await page.route('**/contact', async (route) => {
+      assert.equal(route.request().method(), 'POST');
+      assert.equal(new URLSearchParams(route.request().postData()).get('contact[email]'), 'signup@example.test');
+      await route.fulfill({ status: 303, headers: { location: successUrl } });
+    });
+
+    await page.goto(successUrl);
+    const popup = page.locator('[data-popup-newsletter]');
+    const code = popup.getByText('AEWELCOME10', { exact: true });
+    const email = popup.locator('#PopupNewsletterEmail');
+    const submit = popup.locator('button[type="submit"]');
+    await popup.waitFor({ state: 'visible' });
+    assert.equal(await code.count(), 0, 'Opening a success URL alone does not reveal a code');
+
+    for (const value of ['', 'invalid']) {
+      await email.fill(value);
+      await submit.click();
+      assert.equal(await email.evaluate((input) => input.validity.valid), false);
+      assert.equal(await code.count(), 0);
+    }
+
+    await email.fill('signup@example.test');
+    await submit.click();
+    await code.waitFor({ state: 'visible' });
+    assert.equal(await email.count(), 0);
+    await page.reload();
+    assert.equal(await code.count(), 0, 'The signup state is consumed on return');
   });
 });
 
